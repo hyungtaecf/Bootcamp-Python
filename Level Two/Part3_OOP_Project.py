@@ -114,7 +114,6 @@ class Hand(Deck):
         else:
             return None
 
-
 class Player:
     """
     This is the Player class, which takes in a name and an instance of a Hand
@@ -123,7 +122,6 @@ class Player:
     def __init__(self, name, hand):
         self.name = name
         self.hand = hand
-        pass
 
     def take_cards(self, table):
         temp = Hand([])
@@ -251,9 +249,12 @@ class Game():
         self.over = False
         self.war = False
         self.log = ""
+        self.battle_count = 0
+        self.war_count = 0
 
     def game_over(self, winner):
         self.log += "{} WINS!!".format(str(winner))+"\n"
+            self.log += "Number of battles: {}\nNumber of wars: {}".format(self.battle_count, self.war_count)+"\n"
         self.over = True
 
     def check_cards(self):
@@ -276,6 +277,7 @@ class Game():
 
     def battle(self):
         if self.player.play_card(table) and self.opponent.play_card(table):
+            self.battle_count+=1
             print(game)
             self.log+="*Players play the cards*"+"\n"
             next()
@@ -296,10 +298,11 @@ class Game():
             else:
                 self.log+="PREPARE YOURSELVES, BECAUSE IT IS A WAR!!!"+"\n"
                 self.war=True
-                if self.player.play_3_cards_down(self.table) < 3 or not self.player.have_cards:
+                self.war_count+=1
+                if self.player.play_3_cards_down(self.table) < 3 or not self.player.have_cards():
                     self.log+="{} doesn't have enough cards to play!".format(str(self.player))+"\n"
                     self.game_over(opponent)
-                elif self.opponent.play_3_cards_down(self.table) < 3 or not self.opponent.have_cards:
+                elif self.opponent.play_3_cards_down(self.table) < 3 or not self.opponent.have_cards():
                     self.log+="{} doesn't have enough cards to play!".format(str(self.opponent))+"\n"
                     self.game_over(player)
                 else:
